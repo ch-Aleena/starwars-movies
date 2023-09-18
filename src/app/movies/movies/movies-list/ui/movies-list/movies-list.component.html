@@ -1,0 +1,8 @@
+<div *ngIf="moviesList$ | async as list">
+  {{ list.message }}
+  <div *ngFor="let res of list.result">
+    <div *ngIf="res.properties as p">
+      <h3 (click)="goMoviesDetails(p.url)">{{ p.title }}</h3>
+    </div>
+  </div>
+</div>

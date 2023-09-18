@@ -1,0 +1,8 @@
+<div>abc {{ movieDetails }}</div>
+<div *ngIf="movieDetails as movie">
+  <div *ngIf=""></div>
+</div>
+
+<ng-template #loading>
+  <p>loading....</p>
+</ng-template>
