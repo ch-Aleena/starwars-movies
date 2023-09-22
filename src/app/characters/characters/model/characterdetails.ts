@@ -1,4 +1,4 @@
-export interface Characterlist {
+export interface characterDetails {
   message: string;
   result: Results;
 }
@@ -23,9 +23,4 @@ export interface Properties {
   name: string;
   homeworld: string;
   url: string;
-}
-
-export interface characterFilter {
-  char: string;
-  _id: string;
 }

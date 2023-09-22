@@ -11,7 +11,7 @@ export class MovieDetailsService {
   constructor(private http: HttpClient) {}
   //api url for movie details
   private ApiUrl = 'films/';
-  baseUrl = environment.API_BASE_URL;
+  private baseUrl = environment.API_BASE_URL;
 
   getMovieDetails(movie_id) {
     return this.http.get<FilmsDetails>(this.baseUrl + this.ApiUrl + movie_id);

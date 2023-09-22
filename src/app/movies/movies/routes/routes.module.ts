@@ -18,6 +18,13 @@ const routes: Routes = [
     path: 'moviesdetails/:id',
     component: MoviesDetailsComponent,
   },
+  {
+    path: 'characters',
+    loadChildren: () =>
+      import('src/app/characters/characters/characters.module').then(
+        (m) => m.CharactersModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -12,19 +12,20 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./movies-list.component.css'],
 })
 export class MoviesListComponent implements OnInit {
+  //varailble to hold data of movies
+  moviesList$: Observable<Films>;
+
   constructor(
     private readonly moviesData: MoviesListService,
     private readonly utility: UtilityService,
     private readonly route: Router
   ) {}
 
-  //varailble to hold data of movies
-  moviesList$: Observable<Films>;
-  prop: any;
   ngOnInit(): void {
     this.moviesList$ = this.moviesData.getMoviesList();
   }
 
+  //navigate to movie's detail page
   goMoviesDetails(url: string) {
     const id = this.utility.extractIdbyUrl(url);
     this.route.navigate([`movies/moviesdetails/${id}`]);

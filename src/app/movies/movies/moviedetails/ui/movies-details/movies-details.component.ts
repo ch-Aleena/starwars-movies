@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MovieDetailsService } from '../../data/movie-details.service';
 import { FilmsDetails } from '../../model/films-details';
 import { Observable } from 'rxjs';
-import { Characterlist } from '../../../movies-list/model/character-list';
+import {
+  Characterlist,
+  characterFilter,
+} from '../../../movies-list/model/character-list';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-movies-details',
@@ -11,13 +15,19 @@ import { Characterlist } from '../../../movies-list/model/character-list';
   styleUrls: ['./movies-details.component.css'],
 })
 export class MoviesDetailsComponent implements OnInit {
+  //varaible to hold the movie data
+  movieDetails: FilmsDetails;
+
+  //an array to store name and id of each character
+  character: characterFilter[] = [];
+
   constructor(
-    private activeRoute: ActivatedRoute,
-    private _moviesDetails: MovieDetailsService
+    private readonly activeRoute: ActivatedRoute,
+    private readonly _moviesDetails: MovieDetailsService,
+    private readonly location: Location,
+    private readonly route: Router
   ) {}
 
-  movieDetails: FilmsDetails;
-  character$: Characterlist;
   ngOnInit(): void {
     this.activeRoute.paramMap.subscribe((params: Params) => {
       let _id = parseInt(params['get']('id'));
@@ -30,7 +40,7 @@ export class MoviesDetailsComponent implements OnInit {
     this._moviesDetails.getMovieDetails(_id).subscribe((res) => {
       console.log(res);
       this.movieDetails = JSON.parse(JSON.stringify(res));
-      console.log('message' + this.movieDetails);
+      this.getCharacters();
     });
   }
 
@@ -45,10 +55,23 @@ export class MoviesDetailsComponent implements OnInit {
         this._moviesDetails
           .getCharacter(this.movieDetails.result.properties.characters[i])
           .subscribe((res) => {
-            this.character$ = res;
-            console.log(this.character$);
+            const newcharacter = {
+              char: res.result.properties.name,
+              _id: res.result.uid,
+            };
+            console.log(newcharacter);
+            this.character.push(newcharacter);
           });
       }
     }
+  }
+
+  //navigate to character details page
+  chacracterDetails(id) {
+    this.route.navigate([`movies/characters/character/${id}`]);
+  }
+
+  backToMovies() {
+    this.location.back();
   }
 }
