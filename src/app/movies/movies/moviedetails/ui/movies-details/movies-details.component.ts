@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MovieDetailsService } from '../../data/movie-details.service';
 import { FilmsDetails } from '../../model/films-details';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
   Characterlist,
   characterFilter,
@@ -13,6 +18,7 @@ import { Location } from '@angular/common';
   selector: 'app-movies-details',
   templateUrl: './movies-details.component.html',
   styleUrls: ['./movies-details.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MoviesDetailsComponent implements OnInit {
   //varaible to hold the movie data
@@ -21,30 +27,40 @@ export class MoviesDetailsComponent implements OnInit {
   //an array to store name and id of each character
   character: characterFilter[] = [];
 
+  //a Subscription array to store subscriptions
+  subscriptions: Subscription[] = [];
+
   constructor(
     private readonly activeRoute: ActivatedRoute,
     private readonly _moviesDetails: MovieDetailsService,
     private readonly location: Location,
-    private readonly route: Router
+    private readonly route: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.activeRoute.paramMap.subscribe((params: Params) => {
-      let _id = parseInt(params['get']('id'));
-      this.getMovieDetails(_id);
-    });
+    this.subscriptions.push(
+      this.activeRoute.paramMap.subscribe((params: Params) => {
+        let _id = parseInt(params['get']('id'));
+        this.getMovieDetails(_id);
+      })
+    );
   }
 
   // api call for movie details
   getMovieDetails(_id) {
-    this._moviesDetails.getMovieDetails(_id).subscribe((res) => {
-      console.log(res);
-      this.movieDetails = JSON.parse(JSON.stringify(res));
-      this.getCharacters();
-    });
+    this.subscriptions.push(
+      this._moviesDetails.getMovieDetails(_id).subscribe((res) => {
+        console.log(res);
+        this.movieDetails = JSON.parse(JSON.stringify(res));
+        this.getCharacters();
+      })
+    );
   }
 
-  //get characters of movie
+  /**
+   * get characters of movie
+   */
   getCharacters() {
     if (this.movieDetails) {
       for (
@@ -52,16 +68,18 @@ export class MoviesDetailsComponent implements OnInit {
         i < this.movieDetails.result.properties.characters.length;
         i++
       ) {
-        this._moviesDetails
-          .getCharacter(this.movieDetails.result.properties.characters[i])
-          .subscribe((res) => {
-            const newcharacter = {
-              char: res.result.properties.name,
-              _id: res.result.uid,
-            };
-            console.log(newcharacter);
-            this.character.push(newcharacter);
-          });
+        this.subscriptions.push(
+          this._moviesDetails
+            .getCharacter(this.movieDetails.result.properties.characters[i])
+            .subscribe((res) => {
+              const newcharacter = {
+                char: res.result.properties.name,
+                _id: res.result.uid,
+              };
+              console.log(newcharacter);
+              this.character.push(newcharacter);
+            })
+        );
       }
     }
   }
@@ -71,7 +89,23 @@ export class MoviesDetailsComponent implements OnInit {
     this.route.navigate([`movies/characters/character/${id}`]);
   }
 
+  getdata() {
+    console.log('data is loaded');
+  }
+
+  /**
+   * go back to movie details page
+   */
   backToMovies() {
     this.location.back();
+  }
+
+  /**
+   * unsubscribe from all subscriptions
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 }

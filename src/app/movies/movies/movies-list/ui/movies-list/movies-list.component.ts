@@ -5,14 +5,16 @@ import { OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UtilityService } from 'src/app/shared/data/utility.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-movies-list',
   templateUrl: './movies-list.component.html',
   styleUrls: ['./movies-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MoviesListComponent implements OnInit {
-  //varailble to hold data of movies
+  //observable to hold data of movies
   moviesList$: Observable<Films>;
 
   constructor(

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments';
 import { characterDetails } from '../model/characterdetails';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,12 @@ export class CharacterdetailsService {
 
   constructor(private http: HttpClient) {}
 
-  //get character details
-  getCharacterDetails(id) {
+  /**
+   * retrive character details
+   * @param id get character based on id
+   * @returns character details
+   */
+  getCharacterDetails(id): Observable<characterDetails> {
     return this.http.get<characterDetails>(
       this.baseUrl + this.characterUrl + id
     );

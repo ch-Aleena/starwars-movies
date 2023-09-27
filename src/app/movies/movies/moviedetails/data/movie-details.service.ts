@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments';
 import { FilmsDetails } from '../model/films-details';
 import { Characterlist } from '../../movies-list/model/character-list';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +14,21 @@ export class MovieDetailsService {
   private ApiUrl = 'films/';
   private baseUrl = environment.API_BASE_URL;
 
-  getMovieDetails(movie_id) {
+  /**
+     get movie details from api call
+   * @returns movie details 
+   */
+
+  getMovieDetails(movie_id): Observable<FilmsDetails> {
     return this.http.get<FilmsDetails>(this.baseUrl + this.ApiUrl + movie_id);
   }
-  getCharacter(url) {
+
+  /**
+    return list of characters based on urls
+   * @returns characters from api call
+   */
+
+  getCharacter(url): Observable<Characterlist> {
     return this.http.get<Characterlist>(url);
   }
 }
