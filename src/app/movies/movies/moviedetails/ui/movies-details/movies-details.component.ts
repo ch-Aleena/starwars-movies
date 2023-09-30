@@ -18,7 +18,6 @@ import { Location } from '@angular/common';
   selector: 'app-movies-details',
   templateUrl: './movies-details.component.html',
   styleUrls: ['./movies-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MoviesDetailsComponent implements OnInit {
   //varaible to hold the movie data
@@ -51,8 +50,8 @@ export class MoviesDetailsComponent implements OnInit {
   getMovieDetails(_id) {
     this.subscriptions.push(
       this._moviesDetails.getMovieDetails(_id).subscribe((res) => {
-        console.log(res);
-        this.movieDetails = JSON.parse(JSON.stringify(res));
+        this.movieDetails = res;
+        console.log(this.movieDetails);
         this.getCharacters();
       })
     );
@@ -76,8 +75,10 @@ export class MoviesDetailsComponent implements OnInit {
                 char: res.result.properties.name,
                 _id: res.result.uid,
               };
-              console.log(newcharacter);
-              this.character.push(newcharacter);
+
+              const newdata = [...this.character];
+              newdata.push(newcharacter);
+              this.character = newdata;
             })
         );
       }
@@ -89,14 +90,10 @@ export class MoviesDetailsComponent implements OnInit {
     this.route.navigate([`movies/characters/character/${id}`]);
   }
 
-  getdata() {
-    console.log('data is loaded');
-  }
-
   /**
    * go back to movie details page
    */
-  backToMovies() {
+  goBack() {
     this.location.back();
   }
 

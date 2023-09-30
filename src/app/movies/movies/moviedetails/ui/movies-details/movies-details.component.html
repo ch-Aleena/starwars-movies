@@ -2,72 +2,15 @@
   <div
     class="bg-sky-100 py-4 max-w-3xl mx-auto my-16 shadow-md lg:hover:scale-105 transition ease-in-out delay-200"
   >
-    <button
-      (click)="getdata()"
-      class="text-sm bg-sky-300 px-4 py-2 mx-4 hover:bg-sky-400 rounded-lg mb-4"
+    <app-movie
+      [movieDetail]="movieDetails"
+      [characterlist]="character"
+      *ngIf="movieDetails; else loading"
+      (character)="chacracterDetails($event)"
+      (movie)="goBack()"
     >
-      Get Data
-    </button>
-    <div *ngIf="movieDetails as movie; else loading" class="mx-4">
-      <div *ngIf="movie.result as res">
-        <div>
-          <button
-            (click)="backToMovies()"
-            class="text-sm bg-sky-300 px-4 py-2 mx-4 hover:bg-sky-400 rounded-lg"
-          >
-            ALL MOVIES
-          </button>
-        </div>
-        <div *ngIf="res.properties as property" class="text-center">
-          <div class="character-name font-bold text-xl text-center mb-8">
-            {{ property.title }}
-          </div>
+    </app-movie>
 
-          <div class="text-gray-700 flex flex-col gap-1 py-3">
-            <div class="flex flex-col border-b pb-2">
-              <div class="sm:max-w-full">
-                {{ property.opening_crawl }}
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center border-b pb-2">
-              <div class="font-medium">Director</div>
-              <div class="sm:max-w-full text-center">
-                {{ property.director }}
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center border-b pb-2">
-              <div class="font-medium">Producer</div>
-              <div class="sm:max-w-full text-center">
-                {{ property.producer }}
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center border-b pb-2">
-              <div class="font-medium">Release Date</div>
-              <div class="sm:max-w-full text-center">
-                {{ property.release_date }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      *ngIf="character as character; else loading"
-      class="grid lg:grid-cols-5 grid-cols-3 gap-2 mx-4"
-    >
-      <div class="font-medium text-gray-700" *ngIf="character">Characters</div>
-      <div *ngFor="let c of character">
-        <p
-          class="text-sm text-gray-700 bg-sky-200 py-1 text-center mt-1 rounded-xl hover:bg-sky-300 hover:cursor-pointer"
-          (click)="chacracterDetails(c._id)"
-        >
-          {{ c.char }}
-        </p>
-      </div>
-    </div>
     <ng-template #loading>
       <div class="flex items-center justify-center rounded-lg">
         <div role="status">
