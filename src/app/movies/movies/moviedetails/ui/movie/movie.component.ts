@@ -26,7 +26,7 @@ export class MovieComponent {
    * envet emiiter for movieDetails
    */
   @Output() character = new EventEmitter<string>();
-  @Output() movie = new EventEmitter<null>();
+  @Output() movie = new EventEmitter();
 
   ngOnInit(): void {
     console.log(this.characterlist);
