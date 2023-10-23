@@ -36,7 +36,7 @@ export class MovieDetailsService {
       .pipe(
         switchMap((films: FilmsDetails) => {
           const characterurl: string[] =
-            films.result.properties.characters.slice(0, 10);
+            films.result.properties.characters.slice(0, 9);
           const characterrequests: Observable<characterDetails>[] =
             characterurl.map((url) => {
               return this.http.get<characterDetails>(url);
@@ -44,7 +44,7 @@ export class MovieDetailsService {
 
           return forkJoin(characterrequests).pipe(
             map((characters: (characterDetails | null)[]) => {
-              const moviedetails: FilmsDetails = { ...films, ...characters };
+              const moviedetails: FilmsDetails = { ...films, characters };
               return moviedetails;
             })
           );

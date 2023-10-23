@@ -1,6 +1,9 @@
+import { characterDetails } from 'src/app/characters/characters/model/characterdetails';
+
 export interface FilmsDetails {
   message: string;
   result: Result;
+  characters?: characterDetails[];
 }
 export interface Result {
   properties: Properties;

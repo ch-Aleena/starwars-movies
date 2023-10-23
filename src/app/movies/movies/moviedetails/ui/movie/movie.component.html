@@ -48,10 +48,10 @@
   >
     <div class="font-medium">Characters</div>
     <div
-      *ngFor="let i of characters"
+      *ngFor="let char of movie.characters"
       class="bg-sky-300 mt-2 text-center py-2 rounded-3xl hover:bg-sky-200 hover:cursor-pointer"
     >
-      <div *ngIf="movie[i] as char">
+      <div>
         <p class="text-xs" (click)="chacracterDetails(char.result.uid)">
           {{ char.result.properties.name }}
         </p>
