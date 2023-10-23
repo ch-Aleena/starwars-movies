@@ -34,7 +34,7 @@ export class MovieDetailsService {
     return this.http
       .get<FilmsDetails>(this.baseUrl + this.ApiUrl + movie_id)
       .pipe(
-        flatMap((films: FilmsDetails) => {
+        switchMap((films: FilmsDetails) => {
           const characterurl: string[] =
             films.result.properties.characters.slice(0, 10);
           const characterrequests: Observable<characterDetails>[] =
