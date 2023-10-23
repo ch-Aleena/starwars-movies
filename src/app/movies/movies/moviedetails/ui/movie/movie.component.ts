@@ -21,6 +21,7 @@ export class MovieComponent {
    */
   @Input() movieDetail: FilmsDetails;
   @Input() characterlist: characterFilter[];
+  characters: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   /**
    * envet emiiter for movieDetails
@@ -29,7 +30,7 @@ export class MovieComponent {
   @Output() movie = new EventEmitter();
 
   ngOnInit(): void {
-    console.log(this.characterlist);
+    console.log(this.movieDetail);
   }
 
   /**

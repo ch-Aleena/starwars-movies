@@ -3,9 +3,8 @@
     class="bg-sky-100 py-4 max-w-3xl mx-auto my-16 shadow-md lg:hover:scale-105 transition ease-in-out delay-200"
   >
     <app-movie
+      *ngIf="movieDetails$ | async as movieDetails; else loading"
       [movieDetail]="movieDetails"
-      [characterlist]="character"
-      *ngIf="movieDetails; else loading"
       (character)="chacracterDetails($event)"
       (movie)="goBack()"
     >

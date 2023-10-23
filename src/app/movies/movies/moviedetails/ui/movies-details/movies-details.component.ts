@@ -21,7 +21,7 @@ import { Location } from '@angular/common';
 })
 export class MoviesDetailsComponent implements OnInit {
   //varaible to hold the movie data
-  movieDetails: FilmsDetails;
+  movieDetails$: Observable<FilmsDetails>;
 
   //an array to store name and id of each character
   character: characterFilter[] = [];
@@ -48,42 +48,13 @@ export class MoviesDetailsComponent implements OnInit {
 
   // api call for movie details
   getMovieDetails(_id) {
-    this.subscriptions.push(
-      this._moviesDetails.getMovieDetails(_id).subscribe((res) => {
-        this.movieDetails = res;
-        console.log(this.movieDetails);
-        this.getCharacters();
-      })
-    );
+    this.movieDetails$ = this._moviesDetails.getMovieDetailss(_id);
+    console.log(this.movieDetails$);
   }
 
   /**
    * get characters of movie
    */
-  getCharacters() {
-    if (this.movieDetails) {
-      for (
-        let i = 0;
-        i < this.movieDetails.result.properties.characters.length;
-        i++
-      ) {
-        this.subscriptions.push(
-          this._moviesDetails
-            .getCharacter(this.movieDetails.result.properties.characters[i])
-            .subscribe((res) => {
-              const newcharacter = {
-                char: res.result.properties.name,
-                _id: res.result.uid,
-              };
-
-              const newdata = [...this.character];
-              newdata.push(newcharacter);
-              this.character = newdata;
-            })
-        );
-      }
-    }
-  }
 
   //navigate to character details page
   chacracterDetails(id) {
